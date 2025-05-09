@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { getAllArticles } from "@/lib/article-queries";
+import { ArticleType, getAllArticles } from "@/lib/article-queries";
 
 export const metadata = {
   title: "Coffee Articles | Coffee Roaster",
@@ -30,7 +30,7 @@ export default async function ArticlesPage() {
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-8">
             {articles.map((article) => (
               <ArticleCard key={article.id} article={article} />
             ))}
@@ -41,7 +41,7 @@ export default async function ArticlesPage() {
   );
 }
 
-function ArticleCard({ article }) {
+function ArticleCard({ article }: { article: ArticleType }) {
   // Format date
   const formattedDate = article.createdAt
     ? new Date(article.createdAt).toLocaleDateString("en-US", {
@@ -54,10 +54,10 @@ function ArticleCard({ article }) {
   return (
     <Link href={`/articles/${article.id}`} className="group">
       <article className="bg-white border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300">
-        <div className="relative h-56 w-full">
+        <div className="relative h-72 w-full">
           <Image
             src={
-              article.picture?.url ||
+              article.picture?.thumbnailUrl ||
               `/placeholder.svg?height=400&width=600&text=${encodeURIComponent(article.title)}`
             }
             alt={article.title}
@@ -70,8 +70,8 @@ function ArticleCard({ article }) {
           <h2 className="text-xl font-semibold mb-2 group-hover:text-gray-700 transition-colors">
             {article.title}
           </h2>
-          {article.summery && (
-            <p className="text-gray-600 line-clamp-3">{article.summery}</p>
+          {article.summary && (
+            <p className="text-gray-600 line-clamp-3">{article.summary}</p>
           )}
           <div className="mt-4 inline-flex items-center text-sm font-medium text-gray-800 group-hover:text-gray-600">
             Read more

@@ -2,10 +2,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { getArticleById, getAllArticles } from "@/lib/article-queries";
 import { ArrowLeft } from "lucide-react";
-
+type Args = {
+  params: Promise<{ id: string }>;
+};
 // Generate metadata for the page
-export async function generateMetadata({ params }) {
-  const article = await getArticleById(params.id);
+export async function generateMetadata({ params }: Args) {
+  const { id } = await params;
+  const article = await getArticleById(id);
 
   if (!article) {
     return {
@@ -16,21 +19,22 @@ export async function generateMetadata({ params }) {
 
   return {
     title: `${article.title} | Coffee Roaster`,
-    description: article.summery || "Read our latest coffee article",
+    description: article.summary || "Read our latest coffee article",
   };
 }
 
 // Generate static params for all articles
-export async function generateStaticParams() {
-  const articles = await getAllArticles();
+// export async function generateStaticParams() {
+//   const articles = await getAllArticles();
 
-  return articles.map((article) => ({
-    id: article.id,
-  }));
-}
+//   return articles.map((article) => ({
+//     id: article.id,
+//   }));
+// }
 
-export default async function ArticlePage({ params }) {
-  const article = await getArticleById(params.id);
+export default async function ArticlePage({ params }: Args) {
+  const { id } = await params;
+  const article = await getArticleById(id);
 
   if (!article) {
     return (

@@ -1,25 +1,14 @@
 import Link from "next/link";
+import type { BeanType } from "@/lib/coffee-queries";
+import { Bean } from "@/components/bean";
 
 interface RichText {
   raw: any;
   html: string;
 }
 
-interface CoffeeBean {
-  name: string;
-  slug: string;
-  price: number;
-  description: RichText;
-  origin: string;
-  roastLevel: string;
-  flavorNotes: string;
-  weight: number;
-  inStock: boolean;
-  image?: string;
-}
-
 interface FeaturedCoffeeProps {
-  beans: CoffeeBean[];
+  beans: BeanType[];
 }
 
 export default function FeaturedCoffee({ beans }: FeaturedCoffeeProps) {
@@ -50,7 +39,7 @@ export default function FeaturedCoffee({ beans }: FeaturedCoffeeProps) {
 
         <div className="text-center mt-12">
           <Link
-            href="/coffee"
+            href="/beans"
             className="inline-block border border-black px-8 py-3 font-medium hover:bg-black hover:text-white transition-colors"
           >
             VIEW ALL COFFEES

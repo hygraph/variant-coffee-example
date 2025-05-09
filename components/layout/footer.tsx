@@ -1,5 +1,5 @@
-import Link from "next/link"
-import { Facebook, Instagram, Twitter } from "lucide-react"
+import Link from "next/link";
+import { Facebook, Instagram, Twitter } from "lucide-react";
 
 export default function Footer() {
   return (
@@ -10,17 +10,26 @@ export default function Footer() {
           <div>
             <h3 className="text-lg font-bold mb-4">ABOUT US</h3>
             <p className="text-gray-300 mb-4">
-              We source, roast, and sell outstanding coffees. Working fairly and transparently with our network of
-              coffee producers.
+              We source, roast, and sell outstanding coffees. Working fairly and
+              transparently with our network of coffee producers.
             </p>
             <div className="flex space-x-4">
-              <Link href="https://instagram.com" className="text-gray-300 hover:text-white">
+              <Link
+                href="https://instagram.com"
+                className="text-gray-300 hover:text-white"
+              >
                 <Instagram className="w-5 h-5" />
               </Link>
-              <Link href="https://facebook.com" className="text-gray-300 hover:text-white">
+              <Link
+                href="https://facebook.com"
+                className="text-gray-300 hover:text-white"
+              >
                 <Facebook className="w-5 h-5" />
               </Link>
-              <Link href="https://twitter.com" className="text-gray-300 hover:text-white">
+              <Link
+                href="https://twitter.com"
+                className="text-gray-300 hover:text-white"
+              >
                 <Twitter className="w-5 h-5" />
               </Link>
             </div>
@@ -31,12 +40,15 @@ export default function Footer() {
             <h3 className="text-lg font-bold mb-4">QUICK LINKS</h3>
             <ul className="space-y-2">
               <li>
-                <Link href="/coffee" className="text-gray-300 hover:text-white">
+                <Link href="/beans" className="text-gray-300 hover:text-white">
                   Coffee
                 </Link>
               </li>
               <li>
-                <Link href="/articles" className="text-gray-300 hover:text-white">
+                <Link
+                  href="/articles"
+                  className="text-gray-300 hover:text-white"
+                >
                   Articles
                 </Link>
               </li>
@@ -46,7 +58,10 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="text-gray-300 hover:text-white">
+                <Link
+                  href="/contact"
+                  className="text-gray-300 hover:text-white"
+                >
                   Contact
                 </Link>
               </li>
@@ -63,7 +78,10 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/shipping" className="text-gray-300 hover:text-white">
+                <Link
+                  href="/shipping"
+                  className="text-gray-300 hover:text-white"
+                >
                   Shipping & Returns
                 </Link>
               </li>
@@ -73,7 +91,10 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/privacy" className="text-gray-300 hover:text-white">
+                <Link
+                  href="/privacy"
+                  className="text-gray-300 hover:text-white"
+                >
                   Privacy Policy
                 </Link>
               </li>
@@ -84,7 +105,8 @@ export default function Footer() {
           <div>
             <h3 className="text-lg font-bold mb-4">NEWSLETTER</h3>
             <p className="text-gray-300 mb-4">
-              Subscribe to our newsletter for updates on new coffees, brewing tips, and special offers.
+              Subscribe to our newsletter for updates on new coffees, brewing
+              tips, and special offers.
             </p>
             <form className="flex">
               <input
@@ -104,9 +126,11 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400">
-          <p>© {new Date().getFullYear()} Coffee Roaster. All rights reserved.</p>
+          <p>
+            © {new Date().getFullYear()} Coffee Roaster. All rights reserved.
+          </p>
         </div>
       </div>
     </footer>
-  )
+  );
 }

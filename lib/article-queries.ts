@@ -1,22 +1,49 @@
 import { fetchFromCMS } from "./graphql-client";
 
+export type ArticleType = {
+  id: string;
+  title: string;
+  summary: string;
+  content: {
+    raw: string;
+    html: string;
+  };
+  picture: {
+    thumbnailUrl: string;
+    url: string;
+  };
+  createdAt: string;
+};
+
+const ArticleFragment = `
+fragment Article on Article {
+  id
+  title
+  summary
+  content {
+    raw
+    html
+  }
+  picture {
+    thumbnailUrl: url(
+      transformation: {image: {resize: {width: 800, height: 600}}, document: {output: {format: webp}}}
+    )
+     url: url(
+       transformation: {image: {}, document: {output: {format: webp}}}
+     )
+  }
+  createdAt
+}`;
 // Get all articles
-export async function getAllArticles() {
-  const query = `
+export async function getAllArticles(): Promise<ArticleType[]> {
+  const query =
+    `
     query AllArticlesQuery {
       articles {
-        id
-        title
-        summary
-        picture {
-          url
-          width
-          height
-        }
-        createdAt
+       ...Article
       }
     }
-  `;
+  ` + ArticleFragment;
 
   try {
     const data = await fetchFromCMS(query);
@@ -28,26 +55,15 @@ export async function getAllArticles() {
 }
 
 // Get a single article by ID
-export async function getArticleById(id: string) {
-  const query = `
+export async function getArticleById(id: string): Promise<ArticleType | null> {
+  const query =
+    `
     query ArticleByIdQuery($id: ID!) {
       article(where: {id: $id}) {
-         id
-         title
-         summary
-         content {
-           raw
-           html
-         }
-         picture {
-           url
-           width
-           height
-         }
-         createdAt
+        ...Article
       }
     }
-  `;
+  ` + ArticleFragment;
 
   try {
     const data = await fetchFromCMS(query, { id });

@@ -1,4 +1,4 @@
-import type { Config } from "tailwindcss"
+import type { Config } from "tailwindcss";
 
 const config: Config = {
   content: [
@@ -50,6 +50,9 @@ const config: Config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        navigation: {
+          DEFAULT: "hsl(var(--navigation))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -80,6 +83,6 @@ const config: Config = {
     },
   },
   plugins: [require("@tailwindcss/typography")],
-}
+};
 
-export default config
+export default config;

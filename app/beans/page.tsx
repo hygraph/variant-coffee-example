@@ -1,97 +1,39 @@
-import Image from "next/image";
-import Link from "next/link";
-import { getAllArticles } from "@/lib/article-queries";
+import { Bean } from "@/components/bean";
+import { getAllCoffeeBeans } from "@/lib/coffee-queries";
 
 export const metadata = {
-  title: "Coffee Articles | Coffee Roaster",
-  description:
-    "Discover brewing tips, coffee origins, and stories from our roastery",
+  title: "Our Coffee Beans | Coffee Roaster",
+  description: "Explore our selection of premium, freshly roasted coffee beans from around the world",
 };
 
-export default async function ArticlesPage() {
-  // Fetch all articles from CMS
-  const articles = await getAllArticles();
+export default async function BeansPage() {
+  const beans = await getAllCoffeeBeans();
 
   return (
     <main className="min-h-screen py-12 md:py-16 lg:py-20">
       <div className="container mx-auto px-4">
         <h1 className="text-4xl md:text-5xl font-bold text-center mb-4">
-          Coffee Articles
+          Our Coffee Beans
         </h1>
         <p className="text-lg text-center text-gray-600 mb-12 max-w-2xl mx-auto">
-          Discover brewing tips, coffee origins, and stories from our roastery
-          in our collection of articles.
+          Discover our carefully selected coffee beans, roasted to perfection 
+          to bring out their unique flavors and characteristics.
         </p>
 
-        {articles.length === 0 ? (
+        {beans.length === 0 ? (
           <div className="text-center py-12">
             <p className="text-lg text-gray-500">
-              No articles found. Check back soon for new content!
+              No beans currently available. Check back soon for new arrivals!
             </p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {articles.map((article) => (
-              <ArticleCard key={article.id} article={article} />
+            {beans.map((bean) => (
+              <Bean key={bean.id} {...bean} />
             ))}
           </div>
         )}
       </div>
     </main>
-  );
-}
-
-function ArticleCard({ article }) {
-  // Format date
-  const formattedDate = article.createdAt
-    ? new Date(article.createdAt).toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      })
-    : "No date";
-
-  return (
-    <Link href={`/articles/${article.id}`} className="group">
-      <article className="bg-white border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300">
-        <div className="relative h-56 w-full">
-          <Image
-            src={
-              article.picture?.url ||
-              `/placeholder.svg?height=400&width=600&text=${encodeURIComponent(article.title)}`
-            }
-            alt={article.title}
-            fill
-            className="object-cover group-hover:scale-105 transition-transform duration-500"
-          />
-        </div>
-        <div className="p-6">
-          <p className="text-sm text-gray-500 mb-2">{formattedDate}</p>
-          <h2 className="text-xl font-semibold mb-2 group-hover:text-gray-700 transition-colors">
-            {article.title}
-          </h2>
-          {article.summery && (
-            <p className="text-gray-600 line-clamp-3">{article.summery}</p>
-          )}
-          <div className="mt-4 inline-flex items-center text-sm font-medium text-gray-800 group-hover:text-gray-600">
-            Read more
-            <svg
-              className="ml-1 w-4 h-4 group-hover:translate-x-1 transition-transform"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M9 5l7 7-7 7"
-              ></path>
-            </svg>
-          </div>
-        </div>
-      </article>
-    </Link>
   );
 }

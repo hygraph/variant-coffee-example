@@ -1,14 +1,15 @@
 import Image from "next/image";
 import Link from "next/link";
+import type { BeanType } from "@/lib/coffee-queries";
 
-export function Bean(bean) {
+export function Bean(bean: BeanType) {
   return (
     <Link href={`/beans/${bean.slug}`} className="group">
-      <div className="bg-white overflow-hidden transition-all duration-300 hover:shadow-lg">
-        <div className="relative h-80 w-full">
+      <div className="bg-white border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300">
+        <div className="relative h-96 w-full">
           <Image
             src={
-              bean.image ||
+              bean.image?.thumbnailUrl ||
               `/placeholder.svg?height=400&width=400&text=${encodeURIComponent(bean.name)}`
             }
             alt={bean.name}
@@ -18,8 +19,10 @@ export function Bean(bean) {
         </div>
         <div className="p-6">
           <div className="flex justify-between items-start mb-2">
-            <h3 className="text-xl font-semibold">{bean.name}</h3>
-            <span className="font-medium">{bean.price.toFixed(2)} €</span>
+            <h3 className="text-xl font-semibold min-h-16">{bean.name}</h3>
+            <span className="font-medium text-nowrap">
+              {bean.price.toFixed(2)} €
+            </span>
           </div>
           <p className="text-gray-600 mb-3">
             {bean.origin} | {bean.roastLevel}
