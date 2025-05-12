@@ -2,20 +2,23 @@ import Image from "next/image";
 import Link from "next/link";
 import { getArticleById, getAllArticles } from "@/lib/article-queries";
 import { ArrowLeft } from "lucide-react";
+import { applyVariant, getSegment } from "@/lib/utils";
 type Args = {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ segment?: string }>;
 };
 // Generate metadata for the page
-export async function generateMetadata({ params }: Args) {
+export async function generateMetadata({ params, searchParams }: Args) {
+  const segment = await getSegment(searchParams);
   const { id } = await params;
-  const article = await getArticleById(id);
-
+  let article = await getArticleById(id, segment);
   if (!article) {
     return {
       title: "Article Not Found",
       description: "The requested article could not be found.",
     };
   }
+  article = applyVariant(article);
 
   return {
     title: `${article.title} | Coffee Roaster`,
@@ -32,10 +35,10 @@ export async function generateMetadata({ params }: Args) {
 //   }));
 // }
 
-export default async function ArticlePage({ params }: Args) {
+export default async function ArticlePage({ params, searchParams }: Args) {
+  const segment = await getSegment(searchParams);
   const { id } = await params;
-  const article = await getArticleById(id);
-
+  let article = await getArticleById(id, segment);
   if (!article) {
     return (
       <div className="container mx-auto px-4 py-12 text-center">
@@ -53,6 +56,7 @@ export default async function ArticlePage({ params }: Args) {
       </div>
     );
   }
+  article = applyVariant(article);
 
   // Format date
   const formattedDate = article.createdAt

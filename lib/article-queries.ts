@@ -4,6 +4,10 @@ export type ArticleType = {
   id: string;
   title: string;
   summary: string;
+  variants: {
+    title: string;
+    summary: string;
+  }[];
   content: {
     raw: string;
     html: string;

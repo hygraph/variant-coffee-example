@@ -45,6 +45,9 @@ export async function getHomePageData(segment?: String) {
         hero {
           ...Hero
         }
+        base_hero: hero {
+          ...Hero
+        }
         featuredCoffeeBeans {
           ...Bean
         }
