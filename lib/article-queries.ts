@@ -18,8 +18,17 @@ export type ArticleType = {
 const ArticleFragment = `
 fragment Article on Article {
   id
+
   title
   summary
+  variants(where:{
+    segment:{
+      slug: $segment
+    }
+  }){
+    title
+    summary
+  }
   content {
     raw
     html
@@ -35,10 +44,10 @@ fragment Article on Article {
   createdAt
 }`;
 // Get all articles
-export async function getAllArticles(): Promise<ArticleType[]> {
+export async function getAllArticles(segment?: string): Promise<ArticleType[]> {
   const query =
     `
-    query AllArticlesQuery {
+    query AllArticlesQuery($segment: String) {
       articles {
        ...Article
       }
@@ -46,7 +55,7 @@ export async function getAllArticles(): Promise<ArticleType[]> {
   ` + ArticleFragment;
 
   try {
-    const data = await fetchFromCMS(query);
+    const data = await fetchFromCMS(query, { segment });
     return data.articles || [];
   } catch (error) {
     console.error("Error fetching articles:", error);
@@ -55,10 +64,13 @@ export async function getAllArticles(): Promise<ArticleType[]> {
 }
 
 // Get a single article by ID
-export async function getArticleById(id: string): Promise<ArticleType | null> {
+export async function getArticleById(
+  id: string,
+  segment?: string,
+): Promise<ArticleType | null> {
   const query =
     `
-    query ArticleByIdQuery($id: ID!) {
+    query ArticleByIdQuery($id: ID!, $segment: String) {
       article(where: {id: $id}) {
         ...Article
       }
@@ -66,42 +78,10 @@ export async function getArticleById(id: string): Promise<ArticleType | null> {
   ` + ArticleFragment;
 
   try {
-    const data = await fetchFromCMS(query, { id });
+    const data = await fetchFromCMS(query, { id, segment });
     return data.article;
   } catch (error) {
     console.error(`Error fetching article with ID ${id}:`, error);
-    return null;
-  }
-}
-
-// Get a single article by slug
-export async function getArticleBySlug(slug: string) {
-  const query = `
-    query ArticleBySlugQuery($slug: String!) {
-      articles(where: {slug: $slug}) {
-        id
-        title
-        excerpt
-        content {
-          raw
-          html
-        }
-        picture {
-          url
-          width
-          height
-        }
-        createdAt
-        slug
-      }
-    }
-  `;
-
-  try {
-    const data = await fetchFromCMS(query, { slug });
-    return data.articles ? data.articles[0] : null;
-  } catch (error) {
-    console.error(`Error fetching article with slug ${slug}:`, error);
     return null;
   }
 }
