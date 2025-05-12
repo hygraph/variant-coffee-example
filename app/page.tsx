@@ -4,11 +4,19 @@ import FeaturedCoffee from "@/components/featured-coffee";
 import Testimonials from "@/components/testimonials";
 import Faqs from "@/components/faqs";
 import Link from "next/link";
+import { applyVariant } from "@/lib/utils";
 
-export default async function HomePage() {
+export default async function HomePage({
+  searchParams,
+}: {
+  searchParams: Promise<{ segment?: string }>;
+}) {
+  const { segment } = await searchParams;
   // Fetch data from CMS
-  const homeData = await getHomePageData();
-
+  let homeData = await getHomePageData(segment);
+  console.log(JSON.stringify(homeData.hero.title));
+  homeData = applyVariant(homeData);
+  console.log(JSON.stringify(homeData.hero.title));
   return (
     <main className="min-h-screen">
       {/* Hero Section */}

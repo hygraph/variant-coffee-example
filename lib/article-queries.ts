@@ -29,7 +29,7 @@ fragment Article on Article {
       transformation: {image: {resize: {width: 800, height: 600}}, document: {output: {format: webp}}}
     )
      url: url(
-       transformation: {image: {}, document: {output: {format: webp}}}
+       transformation: {image: {resize: {height: 1440}}, document: {output: {format: webp}}}
      )
   }
   createdAt

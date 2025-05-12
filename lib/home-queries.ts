@@ -1,51 +1,83 @@
 import { BeanFragment } from "./coffee-queries";
 import { fetchFromCMS } from "./graphql-client";
 
+const TestimonialsFragment = `
+fragment Testimonials on Testimonial {
+  name
+  comment {
+    raw
+    html
+  }
+  rating
+  position
+  date
+}
+`;
+
+const FAQFragment = `
+fragment FAQ on FAQ {
+  question
+  answer {
+    raw
+    html
+  }
+}
+`;
+
+const HeroFragment = `
+fragment Hero on Hero {
+  title
+  slogan
+  buttonText
+  buttonUrl
+  background {
+    url(transformation: {image: {resize: {height: 1440}}, document: {output: {format: webp}}})
+  }
+}
+`;
+
 // Query for the homepage data based on your CMS structure
-export async function getHomePageData() {
+export async function getHomePageData(segment?: String) {
   const query =
     `
-    query HomePageQuery {
-    homePage(where: {id: "cmae4766h00iq07vwew6jbdah"}) {
-           hero {
-             title
-             slogan
-             buttonText
-             buttonUrl
-             background {
-               url(transformation:{
-                 document: {
-                   output: {
-                     format: webp
-                   }
-                 }
-               })
-             }
-           }
-           featuredCoffeeBeans {
-            ...Bean
-           }
-           faqs {
-             question
-             answer {
-               raw
-               html
-             }
-           }
-           testimonials {
-             name
-             comment {
-               raw
-               html
-             }
-             rating
-             position
-             date
-           }
-         }
-    }
-  ` + BeanFragment;
+    query HomePageQuery($segment: String) {
+      homePage(where: {id: "cmae4766h00iq07vwew6jbdah"}) {
+        hero {
+          ...Hero
+        }
+        featuredCoffeeBeans {
+          ...Bean
+        }
+        faqs {
+          ...FAQ
+        }
+        testimonials {
+          ...Testimonials
+        }
 
-  const data = await fetchFromCMS(query);
+        variants(where:{
+          segment:{
+            slug: $segment
+          }
+        }){
+          hero {
+          ...Hero
+        }
+        faqs {
+          ...FAQ
+        }
+        testimonials {
+          ...Testimonials
+        }
+        }
+      }
+    }
+  ` +
+    BeanFragment +
+    HeroFragment +
+    FAQFragment +
+    TestimonialsFragment;
+
+  const data = await fetchFromCMS(query, { segment });
   return data.homePage;
 }

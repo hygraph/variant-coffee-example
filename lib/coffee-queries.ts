@@ -39,7 +39,7 @@ fragment Bean on CoffeeBean {
       transformation: {image: {resize: {width: 400, height: 400}}, document: {output: {format: webp}}}
     )
      url: url(
-       transformation: {image: {}, document: {output: {format: webp}}}
+       transformation: {image: {resize: {height: 1440}}, document: {output: {format: webp}}}
      )
   }
 }`;
