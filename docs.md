@@ -74,7 +74,11 @@ export async function getArticleById(
         id
         title
         summary
-        variants(where: {segment: {slug: $segment}}) {
+        variants(where:{
+            segments_some:{
+              slug: $segment
+            }
+          }) {
           title
           summary
         }

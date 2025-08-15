@@ -37,10 +37,11 @@ fragment Hero on Hero {
 `;
 
 // Query for the homepage data based on your CMS structure
-export async function getHomePageData(segment?: String) {
+export async function getHomePageData(segment?: String, variantId?: String) {
+  console.log(variantId);
   const query =
     `
-    query HomePageQuery($segment: String) {
+    query HomePageQuery($segment: String, $variantId: ID) {
       homePage(where: {id: "cmae4766h00iq07vwew6jbdah"}) {
         hero {
           ...Hero
@@ -59,10 +60,14 @@ export async function getHomePageData(segment?: String) {
         }
 
         variants(where:{
-          segment:{
-            slug: $segment
-          }
-        }){
+                   OR: [{
+                   segments_some:{
+                     slug: $segment
+                   }
+                   },{
+                   id: $variantId
+                   }]
+                 }){
           hero {
           ...Hero
         }
@@ -81,6 +86,6 @@ export async function getHomePageData(segment?: String) {
     FAQFragment +
     TestimonialsFragment;
 
-  const data = await fetchFromCMS(query, { segment });
+  const data = await fetchFromCMS(query, { segment, variantId });
   return data.homePage;
 }

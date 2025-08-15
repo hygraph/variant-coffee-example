@@ -30,3 +30,12 @@ export async function getSegment(
   const cookieSegment = cookieStore.get("segment");
   return segment || cookieSegment?.value;
 }
+
+export async function getVariantId(
+  searchParams: Promise<{ variant?: string }>,
+): Promise<string | undefined> {
+  const { variant } = await searchParams;
+  const cookieStore = await cookies();
+  // const cookieSegment = cookieStore.get("segment");
+  return variant; //|| cookieSegment?.value;
+}

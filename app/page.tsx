@@ -4,16 +4,17 @@ import FeaturedCoffee from "@/components/featured-coffee";
 import Testimonials from "@/components/testimonials";
 import Faqs from "@/components/faqs";
 import Link from "next/link";
-import { applyVariant, getSegment } from "@/lib/utils";
+import { applyVariant, getSegment, getVariantId } from "@/lib/utils";
 
 export default async function HomePage({
   searchParams,
 }: {
-  searchParams: Promise<{ segment?: string }>;
+  searchParams: Promise<{ segment?: string; variant?: string }>;
 }) {
   const segment = await getSegment(searchParams);
+  const variantId = await getVariantId(searchParams);
   // Fetch data from CMS
-  let homeData = await getHomePageData(segment);
+  let homeData = await getHomePageData(segment, variantId);
   homeData = applyVariant(homeData);
   // console.log(JSON.stringify(homeData.hero.title));
   return (

@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArticleType, getAllArticles } from "@/lib/article-queries";
-import { applyVariant, getSegment } from "@/lib/utils";
+import { applyVariant, getSegment, getVariantId } from "@/lib/utils";
 
 export const metadata = {
   title: "Coffee Articles | Coffee Roaster",
@@ -12,11 +12,12 @@ export const metadata = {
 export default async function ArticlesPage({
   searchParams,
 }: {
-  searchParams: Promise<{ segment?: string }>;
+  searchParams: Promise<{ segment?: string; variant?: string }>;
 }) {
   const segment = await getSegment(searchParams);
+  const variantId = await getVariantId(searchParams);
   // Fetch all articles from CMS
-  let articles = await getAllArticles(segment);
+  let articles = await getAllArticles(segment, variantId);
 
   articles = articles.map((a) => applyVariant(a));
 

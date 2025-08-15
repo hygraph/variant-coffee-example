@@ -26,10 +26,14 @@ fragment Article on Article {
   title
   summary
   variants(where:{
-    segment:{
-      slug: $segment
-    }
-  }){
+             OR: [{
+             segments_some:{
+               slug: $segment
+             }
+             },{
+             id: $variantId
+             }]
+           }){
     title
     summary
   }
@@ -48,10 +52,13 @@ fragment Article on Article {
   createdAt
 }`;
 // Get all articles
-export async function getAllArticles(segment?: string): Promise<ArticleType[]> {
+export async function getAllArticles(
+  segment?: string,
+  variantId?: string,
+): Promise<ArticleType[]> {
   const query =
     `
-    query AllArticlesQuery($segment: String) {
+    query AllArticlesQuery($segment: String, $variantId: ID) {
       articles {
        ...Article
       }
@@ -71,10 +78,11 @@ export async function getAllArticles(segment?: string): Promise<ArticleType[]> {
 export async function getArticleById(
   id: string,
   segment?: string,
+  variantId?: string,
 ): Promise<ArticleType | null> {
   const query =
     `
-    query ArticleByIdQuery($id: ID!, $segment: String) {
+    query ArticleByIdQuery($id: ID!, $segment: String, $variantId: ID) {
       article(where: {id: $id}) {
         ...Article
       }
@@ -82,7 +90,7 @@ export async function getArticleById(
   ` + ArticleFragment;
 
   try {
-    const data = await fetchFromCMS(query, { id, segment });
+    const data = await fetchFromCMS(query, { id, segment, variantId });
     return data.article;
   } catch (error) {
     console.error(`Error fetching article with ID ${id}:`, error);

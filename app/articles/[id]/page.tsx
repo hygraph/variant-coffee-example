@@ -2,16 +2,17 @@ import Image from "next/image";
 import Link from "next/link";
 import { getArticleById, getAllArticles } from "@/lib/article-queries";
 import { ArrowLeft } from "lucide-react";
-import { applyVariant, getSegment } from "@/lib/utils";
+import { applyVariant, getSegment, getVariantId } from "@/lib/utils";
 type Args = {
   params: Promise<{ id: string }>;
-  searchParams: Promise<{ segment?: string }>;
+  searchParams: Promise<{ segment?: string; variant?: string }>;
 };
 // Generate metadata for the page
 export async function generateMetadata({ params, searchParams }: Args) {
   const segment = await getSegment(searchParams);
+  const variantId = await getVariantId(searchParams);
   const { id } = await params;
-  let article = await getArticleById(id, segment);
+  let article = await getArticleById(id, segment, variantId);
   if (!article) {
     return {
       title: "Article Not Found",
@@ -37,8 +38,9 @@ export async function generateMetadata({ params, searchParams }: Args) {
 
 export default async function ArticlePage({ params, searchParams }: Args) {
   const segment = await getSegment(searchParams);
+  const variantId = await getVariantId(searchParams);
   const { id } = await params;
-  let article = await getArticleById(id, segment);
+  let article = await getArticleById(id, segment, variantId);
   if (!article) {
     return (
       <div className="container mx-auto px-4 py-12 text-center">
