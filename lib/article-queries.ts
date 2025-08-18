@@ -7,6 +7,10 @@ export type ArticleType = {
   variants: {
     title: string;
     summary: string;
+    content: {
+       raw: string;
+       html: string;
+  };
   }[];
   content: {
     raw: string;
@@ -30,6 +34,10 @@ const ArticleFragment = `
     ) {
       title
       summary
+      content {
+        raw
+        html
+     }
     }
     content {
       raw
