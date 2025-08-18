@@ -12,7 +12,7 @@ export default function Header() {
             {/* Center - Logo */}
             <div className="w-1/3 flex justify-center">
               <Link href="/" className="text-xl font-bold" aria-label="home">
-                Third Wave
+                Third Wave Coffee
               </Link>
             </div>
 
