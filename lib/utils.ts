@@ -36,6 +36,5 @@ export async function getVariantId(
 ): Promise<string | undefined> {
   const { variant } = await searchParams;
   const cookieStore = await cookies();
-  // const cookieSegment = cookieStore.get("segment");
-  return variant; //|| cookieSegment?.value;
+  return variant;
 }

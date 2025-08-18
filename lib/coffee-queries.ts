@@ -20,40 +20,47 @@ export type BeanType = {
   };
 };
 export const BeanFragment = `
-fragment Bean on CoffeeBean {
-  id
-  name
-  slug
-  price
-  description {
-    raw
-    html
+  fragment Bean on CoffeeBean {
+    id
+    name
+    slug
+    price
+    description {
+      raw
+      html
+    }
+    origin
+    roastLevel
+    flavorNotes
+    weight
+    inStock
+    image {
+      thumbnailUrl: url(
+        transformation: {
+          image: { resize: { width: 400, height: 400 } }
+          document: { output: { format: webp } }
+        }
+      )
+      url: url(
+        transformation: {
+          image: { resize: { height: 1440 } }
+          document: { output: { format: webp } }
+        }
+      )
+    }
   }
-  origin
-  roastLevel
-  flavorNotes
-  weight
-  inStock
-  image {
-    thumbnailUrl: url(
-      transformation: {image: {resize: {width: 400, height: 400}}, document: {output: {format: webp}}}
-    )
-     url: url(
-       transformation: {image: {resize: {height: 1440}}, document: {output: {format: webp}}}
-     )
-  }
-}`;
+`;
 
 // Get all coffee beans
 export async function getAllCoffeeBeans(): Promise<BeanType[]> {
   const query =
     `
-    query AllCoffeeBeansQuery {
-      coffeeBeans {
-        ...Bean
+      query AllCoffeeBeansQuery {
+        coffeeBeans {
+          ...Bean
+        }
       }
-    }
-  ` + BeanFragment;
+    ` + BeanFragment;
 
   const data = await fetchFromCMS(query);
   return data.coffeeBeans;
@@ -65,12 +72,12 @@ export async function getCoffeeBeanBySlug(
 ): Promise<BeanType | null> {
   const query =
     `
-    query CoffeeBeanBySlugQuery($slug: String!) {
-      coffeeBean(where: {slug: $slug}) {
-        ...Bean
+      query CoffeeBeanBySlugQuery($slug: String!) {
+        coffeeBean(where: { slug: $slug }) {
+          ...Bean
+        }
       }
-    }
-  ` + BeanFragment;
+    ` + BeanFragment;
 
   try {
     const data = await fetchFromCMS(query, { slug });

@@ -20,37 +20,38 @@ export type ArticleType = {
 };
 
 const ArticleFragment = `
-fragment Article on Article {
-  id
+  fragment Article on Article {
+    id
 
-  title
-  summary
-  variants(where:{
-             OR: [{
-             segments_some:{
-               slug: $segment
-             }
-             },{
-             id: $variantId
-             }]
-           }){
     title
     summary
+    variants(
+      where: { OR: [{ segments_some: { slug: $segment } }, { id: $variantId }] }
+    ) {
+      title
+      summary
+    }
+    content {
+      raw
+      html
+    }
+    picture {
+      thumbnailUrl: url(
+        transformation: {
+          image: { resize: { width: 800, height: 600 } }
+          document: { output: { format: webp } }
+        }
+      )
+      url: url(
+        transformation: {
+          image: { resize: { height: 1440 } }
+          document: { output: { format: webp } }
+        }
+      )
+    }
+    createdAt
   }
-  content {
-    raw
-    html
-  }
-  picture {
-    thumbnailUrl: url(
-      transformation: {image: {resize: {width: 800, height: 600}}, document: {output: {format: webp}}}
-    )
-     url: url(
-       transformation: {image: {resize: {height: 1440}}, document: {output: {format: webp}}}
-     )
-  }
-  createdAt
-}`;
+`;
 // Get all articles
 export async function getAllArticles(
   segment?: string,
@@ -58,12 +59,12 @@ export async function getAllArticles(
 ): Promise<ArticleType[]> {
   const query =
     `
-    query AllArticlesQuery($segment: String, $variantId: ID) {
-      articles {
-       ...Article
+      query AllArticlesQuery($segment: String, $variantId: ID) {
+        articles {
+          ...Article
+        }
       }
-    }
-  ` + ArticleFragment;
+    ` + ArticleFragment;
 
   try {
     const data = await fetchFromCMS(query, { segment });
@@ -82,12 +83,12 @@ export async function getArticleById(
 ): Promise<ArticleType | null> {
   const query =
     `
-    query ArticleByIdQuery($id: ID!, $segment: String, $variantId: ID) {
-      article(where: {id: $id}) {
-        ...Article
+      query ArticleByIdQuery($id: ID!, $segment: String, $variantId: ID) {
+        article(where: { id: $id }) {
+          ...Article
+        }
       }
-    }
-  ` + ArticleFragment;
+    ` + ArticleFragment;
 
   try {
     const data = await fetchFromCMS(query, { id, segment, variantId });
