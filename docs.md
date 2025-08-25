@@ -51,6 +51,10 @@ export type ArticleType = {
   variants: {
     title: string;
     summary: string;
+    content: {
+       raw: string;
+       html: string;
+  };    
   }[];
   content: {
     raw: string;
@@ -81,6 +85,24 @@ export async function getArticleById(
           }) {
           title
           summary
+          content {
+            raw
+            html
+          }
+          picture {
+            thumbnailUrl: url(
+              transformation: {
+                image: { resize: { width: 800, height: 600 } }
+                document: { output: { format: webp } }
+              }
+            )
+            url: url(
+              transformation: {
+                image: { resize: { height: 1440 } }
+                document: { output: { format: webp } }
+              }
+            )
+          }
         }
         content {
           raw
@@ -88,10 +110,12 @@ export async function getArticleById(
         }
         picture {
           thumbnailUrl: url(
-            transformation: {image: {resize: {width: 800, height: 600}}, document: {output: {format: webp}}}
+            transformation: {image: {resize: {width: 800, height: 600}}
+            document: {output: {format: webp}}}
           )
           url: url(
-            transformation: {image: {resize: {height: 1440}}, document: {output: {format: webp}}}
+            transformation: {image: {resize: {height: 1440}}
+            document: {output: {format: webp}}}
           )
         }
         createdAt
