@@ -38,6 +38,20 @@ const ArticleFragment = `
         raw
         html
      }
+     picture {
+      thumbnailUrl: url(
+        transformation: {
+          image: { resize: { width: 800, height: 600 } }
+          document: { output: { format: webp } }
+        }
+      )
+      url: url(
+        transformation: {
+          image: { resize: { height: 1440 } }
+          document: { output: { format: webp } }
+        }
+      )
+    }
     }
     content {
       raw
