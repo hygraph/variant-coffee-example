@@ -1,7 +1,7 @@
 ## Third Wave Coffee Roasters Homepage
 
-Marketing site powered by Next.js (App Router) and Hygraph (formerly known as GraphCMS). 
-Styled with Tailwind CSS and Radix UI components.
+Marketing site powered by Next.js (App Router) and Hygraph (formerly known as GraphCMS).  
+Styled with Tailwind CSS and Radix UI components.  
 For a detailed guide on the content variant setup, see [docs.md](./docs.md).
 
 ### Variants & Personalization
@@ -9,6 +9,7 @@ For a detailed guide on the content variant setup, see [docs.md](./docs.md).
 - **Audience targeting**:
   - Provide a segment via URL: `?segment={slug}` or via cookie: `segment={slug}`.
   - Optionally force a specific variant via URL: `?variant={id}` (overrides segment matching when present).
+  - Or use the "Segment Simulator" dropdown at the bottom right-hand corner to set the cookie.
 - **Fetching strategy**:
   - Queries request base content plus `variants` filtered by segment or variant id:
     - See `lib/home-queries.ts` and `lib/article-queries.ts` where `variants(where: { OR: [{ segments_some: { slug: $segment } }, { id: $variantId }] })` is used.
