@@ -2,16 +2,9 @@ import { fetchFromCMS } from "./graphql-client";
 
 export type ArticleType = {
   id: string;
+  
   title: string;
   summary: string;
-  variants: {
-    title: string;
-    summary: string;
-    content: {
-       raw: string;
-       html: string;
-  };
-  }[];
   content: {
     raw: string;
     html: string;
@@ -21,6 +14,15 @@ export type ArticleType = {
     url: string;
   };
   createdAt: string;
+
+  variants: {
+    title: string;
+    summary: string;
+    content: {
+       raw: string;
+       html: string;
+  };
+  }[];
 };
 
 const ArticleFragment = `
@@ -29,30 +31,6 @@ const ArticleFragment = `
 
     title
     summary
-    variants(
-      where: { OR: [{ segments_some: { slug: $segment } }, { id: $variantId }] }
-    ) {
-      title
-      summary
-      content {
-        raw
-        html
-     }
-     picture {
-      thumbnailUrl: url(
-        transformation: {
-          image: { resize: { width: 800, height: 600 } }
-          document: { output: { format: webp } }
-        }
-      )
-      url: url(
-        transformation: {
-          image: { resize: { height: 1440 } }
-          document: { output: { format: webp } }
-        }
-      )
-    }
-    }
     content {
       raw
       html
@@ -72,6 +50,31 @@ const ArticleFragment = `
       )
     }
     createdAt
+
+    variants(
+      where: { OR: [{ segments_some: { slug: $segment } }, { id: $variantId }] }
+    ) {
+      title
+      summary
+      content {
+        raw
+        html
+      }
+      picture {
+       thumbnailUrl: url(
+         transformation: {
+           image: { resize: { width: 800, height: 600 } }
+           document: { output: { format: webp } }
+         }
+       )
+       url: url(
+         transformation: {
+           image: { resize: { height: 1440 } }
+           document: { output: { format: webp } }
+         }
+       )
+     }
+    }
   }
 `;
 // Get all articles
