@@ -78,6 +78,9 @@ export async function getHomePageData(segment?: String, variantId?: String) {
             testimonials {
               ...Testimonials
             }
+            featuredCoffeeBeans {
+              ...Bean
+            }
           }
         }
       }
