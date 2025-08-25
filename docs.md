@@ -76,8 +76,25 @@ export async function getArticleById(
     query ArticleByIdQuery($id: ID!, $segment: String) {
       article(where: {id: $id}) {
         id
+        
         title
         summary
+        content {
+          raw
+          html
+        }
+        picture {
+          thumbnailUrl: url(
+            transformation: {image: {resize: {width: 800, height: 600}}
+            document: {output: {format: webp}}}
+          )
+          url: url(
+            transformation: {image: {resize: {height: 1440}}
+            document: {output: {format: webp}}}
+          )
+        }
+        createdAt
+
         variants(where:{
             segments_some:{
               slug: $segment
@@ -103,22 +120,7 @@ export async function getArticleById(
               }
             )
           }
-        }
-        content {
-          raw
-          html
-        }
-        picture {
-          thumbnailUrl: url(
-            transformation: {image: {resize: {width: 800, height: 600}}
-            document: {output: {format: webp}}}
-          )
-          url: url(
-            transformation: {image: {resize: {height: 1440}}
-            document: {output: {format: webp}}}
-          )
-        }
-        createdAt
+        }        
       }
     }
   `;
