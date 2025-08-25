@@ -1,4 +1,4 @@
-# how to overlay variants:
+# How to overlay variants:
 ```ts
   const segment = await getSegment(searchParams);
   const { id } = await params;
@@ -12,7 +12,7 @@
   article = applyVariant(article);
 ```
 
-# helpers:
+# Helpers:
 ```ts
 export async function getSegment(
   searchParams: Promise<{ segment?: string }>,
@@ -42,7 +42,7 @@ export function applyVariant<
 }
 ```
 
-## query article including variants:
+## Query article including variants:
 ```ts
 export type ArticleType = {
   id: string;
