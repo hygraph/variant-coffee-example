@@ -9,7 +9,7 @@ For a detailed guide on the content variant setup, see [docs.md](./docs.md).
 - **Audience targeting**:
   - Provide a segment via URL: `?segment={slug}` or via cookie: `segment={slug}`.
   - Optionally force a specific variant via URL: `?variant={id}` (overrides segment matching when present).
-  - Or use the "Segment Simulator" dropdown at the bottom right-hand corner to set the cookie.
+  - Or use the "Segment Simulator" dropdown at the bottom right-hand corner to set the cookie via frontend.
 - **Fetching strategy**:
   - Queries request base content plus `variants` filtered by segment or variant id:
     - See `lib/home-queries.ts` and `lib/article-queries.ts` where `variants(where: { OR: [{ segments_some: { slug: $segment } }, { id: $variantId }] })` is used.
@@ -31,6 +31,7 @@ For a detailed guide on the content variant setup, see [docs.md](./docs.md).
     ```js
     document.cookie = 'segment=<segment-slug>; path=/';
     ```
+  - Or use the "Segment Simulator" dropdown at the bottom right-hand corner to set the cookie via frontend.  
 - **Note**: The overlay currently applies the first matched variant. Extend `applyVariant` if you need multi-variant resolution.
 
 ### Tech stack
