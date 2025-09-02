@@ -1,6 +1,6 @@
 ## Third Wave Coffee Roasters Homepage
 
-Marketing site powered by Next.js (App Router) and Hygraph (formerly known as GraphCMS).  
+Example marketing site powered by Next.js (App Router) and Hygraph (formerly known as GraphCMS).  
 Styled with Tailwind CSS and Radix UI components.  
 For a detailed guide on the content variant setup, see [docs.md](./docs.md).
 
