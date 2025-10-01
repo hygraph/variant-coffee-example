@@ -16,7 +16,7 @@ export async function fetchFromCMS(query: string, variables = {}) {
         query,
         variables,
       }),
-      next: { revalidate: 60 }, // Revalidate every minute
+      next: { revalidate: 0 }, // No caching - fetch fresh data every time
     });
 
     const json = await res.json();
