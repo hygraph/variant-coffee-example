@@ -47,7 +47,7 @@ export async function getHomePageData(segment?: String, variantId?: String) {
   const query =
     `
       query HomePageQuery($segment: String, $variantId: ID) {
-        homePage(where: { id: "cmf451g4anhq107mninx7d3zt" }) {
+        homePage(where: { id: "cmae4766h00iq07vwew6jbdah" }) {
           hero {
             ...Hero
           }
