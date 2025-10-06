@@ -8,7 +8,7 @@ export function cn(...inputs: ClassValue[]) {
 
 export function mergeVariant<T extends Record<string, any>>(
   data: T,
-  variant: Partial<T>
+  variant: Partial<T>,
 ): T {
   return {
     ...data,
@@ -17,13 +17,13 @@ export function mergeVariant<T extends Record<string, any>>(
 }
 
 export function applyVariant<
-  T extends Record<string, any> & { variants: Array<Partial<T>> }
+  T extends Record<string, any> & { variants: Array<Partial<T>> },
 >(data: T): T {
   return mergeVariant(data, data.variants[0]);
 }
 
 export async function getSegment(
-  searchParams: Promise<{ segment?: string }>
+  searchParams: Promise<{ segment?: string }>,
 ): Promise<string | undefined> {
   const { segment } = await searchParams;
   const cookieStore = await cookies();
@@ -32,7 +32,7 @@ export async function getSegment(
 }
 
 export async function getVariantId(
-  searchParams: Promise<{ variant?: string }>
+  searchParams: Promise<{ variant?: string }>,
 ): Promise<string | undefined> {
   const { variant } = await searchParams;
   const cookieStore = await cookies();
