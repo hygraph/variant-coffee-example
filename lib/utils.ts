@@ -8,8 +8,11 @@ export function cn(...inputs: ClassValue[]) {
 
 export function mergeVariant<T extends Record<string, any>>(
   data: T,
-  variant: Partial<T>,
+  variant?: Partial<T>,
 ): T {
+  if (!variant) {
+    return data;
+  }
   return {
     ...data,
     ...variant,

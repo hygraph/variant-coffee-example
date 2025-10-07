@@ -26,8 +26,11 @@ export async function getSegment(
 ```ts
 export function mergeVariant<T extends Record<string, any>>(
   data: T,
-  variant: Partial<T>,
+  variant?: Partial<T>,
 ): T {
+  if (!variant) {
+    return data;
+  }
   return {
     ...data,
     ...variant,
@@ -54,7 +57,7 @@ export type ArticleType = {
     content: {
        raw: string;
        html: string;
-  };    
+  };
   }[];
   content: {
     raw: string;
@@ -76,7 +79,7 @@ export async function getArticleById(
     query ArticleByIdQuery($id: ID!, $segment: String) {
       article(where: {id: $id}) {
         id
-        
+
         title
         summary
         content {
@@ -120,7 +123,7 @@ export async function getArticleById(
               }
             )
           }
-        }        
+        }
       }
     }
   `;
