@@ -1,3 +1,4 @@
+import { coffeeRecommendations, testingCtx } from "@/dy/coffeeRecomendations";
 import { BeanFragment } from "./coffee-queries";
 import { fetchFromCMS } from "./graphql-client";
 
@@ -43,10 +44,14 @@ const HeroFragment = `
 
 // Query for the homepage data based on your CMS structure
 export async function getHomePageData(segment?: String, variantId?: String) {
+  // todo: receive dynamic yield context to pass on.
+
+  const recomendedCoffees = await coffeeRecommendations(testingCtx);
+  console.debug(recomendedCoffees);
   console.log(variantId);
   const query =
     `
-      query HomePageQuery($segment: String, $variantId: ID) {
+    query HomePageQuery($segment: String, $variantId: ID, $recomendedCoffees: [ID!]!) {
         homePage(where: { id: "cmae4766h00iq07vwew6jbdah" }) {
           hero {
             ...Hero
@@ -54,7 +59,7 @@ export async function getHomePageData(segment?: String, variantId?: String) {
           base_hero: hero {
             ...Hero
           }
-          featuredCoffeeBeans {
+          featuredCoffeeBeans(where: { id_in: $recomendedCoffees }) {
             ...Bean
           }
           faqs {
@@ -78,9 +83,6 @@ export async function getHomePageData(segment?: String, variantId?: String) {
             testimonials {
               ...Testimonials
             }
-            featuredCoffeeBeans {
-              ...Bean
-            }
           }
         }
       }
@@ -90,6 +92,10 @@ export async function getHomePageData(segment?: String, variantId?: String) {
     FAQFragment +
     TestimonialsFragment;
 
-  const data = await fetchFromCMS(query, { segment, variantId });
+  const data = await fetchFromCMS(query, {
+    segment,
+    variantId,
+    recomendedCoffees,
+  });
   return data.homePage;
 }
