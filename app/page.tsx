@@ -5,6 +5,8 @@ import Testimonials from "@/components/testimonials";
 import Faqs from "@/components/faqs";
 import Link from "next/link";
 import { applyVariant, getSegment, getVariantId } from "@/lib/utils";
+import { buildDYContext } from "@/dy/context";
+import { coffeeRecommendations } from "@/dy/coffeeRecomendations";
 
 export default async function HomePage({
   searchParams,
@@ -13,6 +15,12 @@ export default async function HomePage({
 }) {
   const segment = await getSegment(searchParams);
   const variantId = await getVariantId(searchParams);
+
+  // Get DY recommendations
+  const dyCtx = await buildDYContext({ pagePath: "/", pageType: "HOMEPAGE" });
+  const recommendedSkus = await coffeeRecommendations(dyCtx);
+  console.debug("DY recommended SKUs:", recommendedSkus);
+
   // Fetch data from CMS
   let homeData = await getHomePageData(segment, variantId);
   homeData = applyVariant(homeData);

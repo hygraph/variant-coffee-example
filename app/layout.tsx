@@ -10,6 +10,7 @@ import { DynamicYieldProvider } from "@/components/dynamic-yield-provider";
 const inter = Inter({ subsets: ["latin"] });
 
 // Dynamic Yield Section ID
+// const DY_SECTION_ID = undefined;
 const DY_SECTION_ID = process.env.NEXT_PUBLIC_DY_SECTION_ID;
 
 export const metadata = {
@@ -30,14 +31,14 @@ export default function RootLayout({
         {DY_SECTION_ID && (
           <>
             <Script
-              id="dy-api-static"
-              src={`https://cdn.dynamicyield.com/api/${DY_SECTION_ID}/api_static.js`}
+              id="dy-api-dynamic"
+              src={`https://cdn.dynamicyield.com/api/${DY_SECTION_ID}/api_dynamic.js`}
               strategy="beforeInteractive"
             />
             <Script
-              id="dy-api-dynamic"
-              src={`https://cdn.dynamicyield.com/api/${DY_SECTION_ID}/api_dynamic.js`}
-              strategy="afterInteractive"
+              id="dy-api-static"
+              src={`https://cdn.dynamicyield.com/api/${DY_SECTION_ID}/api_static.js`}
+              strategy="beforeInteractive"
             />
           </>
         )}

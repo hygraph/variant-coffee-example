@@ -50,19 +50,14 @@ function DynamicYieldTracker() {
   const isFirstRender = useRef(true);
 
   useEffect(() => {
-    // Skip the first render since DY handles the initial page load
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
-      return;
-    }
+    if (typeof window !== "undefined" && window.DY) {
+      console.log("spa ispageview");
 
-    // Notify DY of SPA navigation
-    if (typeof window !== "undefined" && window.DY?.API) {
       const fullPath = searchParams.toString()
         ? `${pathname}?${searchParams.toString()}`
         : pathname;
-
-      window.DY.API("spa", {
+      console.log("spa path", {
+        isPageView: true,
         path: fullPath,
         title: document.title,
         context: {
@@ -70,6 +65,19 @@ function DynamicYieldTracker() {
           data: getPageData(pathname),
         },
       });
+      window.DY.API("spa", {
+        isPageView: true,
+        path: fullPath,
+        title: document.title,
+        context: {
+          type: getPageType(pathname),
+          data: getPageData(pathname),
+        },
+      });
+      window.DY.recommendationContext = {
+        type: getPageType(pathname),
+        data: getPageData(pathname),
+      };
     }
   }, [pathname, searchParams]);
 
@@ -101,4 +109,3 @@ export function DynamicYieldProvider({ children }: DynamicYieldProviderProps) {
     </>
   );
 }
-

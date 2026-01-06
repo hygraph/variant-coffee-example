@@ -1,24 +1,5 @@
-interface DynamicYieldContext {
-  user: {
-    dyid: string;
-    dyid_server: string;
-  };
-  session: {
-    dy: string;
-  };
-  context: {
-    page: {
-      type: string;
-      data: any[];
-      location: string;
-      locale: string;
-    };
-    device: {
-      ip: string;
-      userAgent: string;
-    };
-  };
-}
+import { DYContext } from "./backend-decisions";
+
 interface DynamicRecommendationsRequest {
   selector: {
     names: string[];
@@ -84,7 +65,7 @@ interface DynamicRecommendationsResponse {
 }
 
 export async function getDynamicRecommendations(
-  requestData: DynamicRecommendationsRequest & DynamicYieldContext,
+  requestData: DynamicRecommendationsRequest & DYContext
 ): Promise<DynamicRecommendationsResponse> {
   const url = "https://dy-api.com/v2/serve/user/choose";
   const options = {
@@ -101,8 +82,8 @@ export async function getDynamicRecommendations(
   return response.json();
 }
 
-export async function coffeeRecommendations(dyCtx: DynamicYieldContext) {
-  const requestData: DynamicRecommendationsRequest & DynamicYieldContext = {
+export async function coffeeRecommendations(dyCtx: DYContext) {
+  const requestData: DynamicRecommendationsRequest & DYContext = {
     ...dyCtx,
     selector: {
       names: ["testing-recommendation"],
@@ -118,28 +99,6 @@ export async function coffeeRecommendations(dyCtx: DynamicYieldContext) {
   console.debug(JSON.stringify(resp, null, 2));
 
   return resp.choices[0].variations[0].payload.data.slots.map(
-    (slot) => slot.sku,
+    (slot) => slot.sku
   );
 }
-
-export const testingCtx: DynamicYieldContext = {
-  user: {
-    dyid: "00000000-0000-0000-0000-000000000000",
-    dyid_server: "00000000-0000-0000-0000-000000000000",
-  },
-  session: {
-    dy: "00000000-0000-0000-0000-000000000000",
-  },
-  context: {
-    page: {
-      type: "HOMEPAGE",
-      data: [],
-      location: "http://localhost/",
-      locale: "en_US",
-    },
-    device: {
-      ip: "8.8.4.4",
-      userAgent: "Mozilla/5.0 (X11; ; U; Linux armv7l; en-us)",
-    },
-  },
-};
