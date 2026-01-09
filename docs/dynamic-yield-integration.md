@@ -513,6 +513,22 @@ IF user affinity includes "Dark Roast" → Return segment "dark-roast-lovers"
 
 This works but requires manual rule setup and doesn't leverage DY's ML. For simple use cases with clear targeting criteria, this may be sufficient.
 
+### Unexplored: DY Integrations & Connectors
+
+This entire exploration was limited to what could be found in public documentation and API references. The topic of **DY Integrations/Connectors** was not fully investigated and may hold answers to some of the open questions above.
+
+**What we know:**
+- DY has a [Contentful Connector](https://support.dynamicyield.com/hc/en-us/articles/13358550861341-Contentful-Connector) documented
+- From initial reading, it appears to be a way to set up API-based syncing of variants/products
+- It's unclear if the connector enables more dynamic use cases beyond sync
+
+**What we don't know:**
+- How DY envisions custom CMS integrations working in their architecture
+- Whether connectors provide additional capabilities beyond feed syncing
+- If there are integration patterns we're missing that would solve the segment allocation problem
+
+**Next step:** Request documentation or guidance from Dynamic Yield on how a custom integration (similar to Contentful) is supposed to work. This could reveal integration patterns or APIs we haven't discovered yet.
+
 ---
 
 ## Notes on Affinities
