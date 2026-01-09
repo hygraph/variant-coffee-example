@@ -419,21 +419,73 @@ The sync maps Hygraph fields to DY template variables:
 
 ## Open Questions: Segment-Driven Variants
 
-### The Challenge
+### The Core Challenge
 
-We attempted to use DY segments to drive Hygraph variant selection, but encountered limitations.
+> **Big open question:** If someone wants to use Hygraph segments but have DY make the decision about *which* segment to assign a user to—how exactly do we accomplish this?
 
-### What We Tried
+We attempted to sync Hygraph segments as DY variants to drive Hygraph variant selection, but encountered significant limitations around automated decision-making.
 
-1. **Synced segments to DY** (`dy/sync-segments.ts`)
+### What We Tried: Segments as Variants
+
+1. **Synced segments to DY** (`dy/sync-segments.ts`) as variation feed items
 2. **Created backend JSON template** in DY that returns a segment ID
 3. **Used segment ID** to filter Hygraph variants
+
+### The Problem: No Real Intelligence
+
+The issue is with **"automatically"** here. We can easily design custom rules in DY to redirect certain users into certain segments, but there is **zero real intelligence**—it's all manual, rule-based configuration in DY.
+
+**Example of manual rules:**
+```
+IF referrer contains "google.com/shopping" → Segment A
+ELSE IF user is returning visitor → Segment B  
+ELSE → Segment C
+```
+
+This may be sufficient for simple use cases, but DY isn't actually *learning* or *optimizing* segment assignment. It's just following deterministic rules we configure.
 
 ### Why It's Limited
 
 - **DY doesn't understand the variant content** - It only sees an opaque ID
 - **Optimization is blind** - DY can optimize for revenue/conversions, but doesn't know *why* a variant performs better
 - **No semantic learning** - Unlike product recommendations where DY understands categories/attributes
+- **No ML-driven allocation** - Segment assignment is purely rule-based, not data-driven
+
+### Unexplored Idea: Segments as Products
+
+> **Not yet tested:** Instead of syncing segments as variants, sync them as **products**.
+
+Products in DY are much more powerful than variants because:
+
+1. **ML-based recommendation strategies** - DY has recommendation algorithms (collaborative filtering, popularity, similarity) that could "recommend" a segment to a user
+2. **Affinity learning** - DY builds user affinity profiles based on product interactions
+3. **Automatic optimization** - The recommendation engine learns which "products" (segments) perform best for which user types
+
+**How this could work:**
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                   Segments as Products Flow                      │
+└─────────────────────────────────────────────────────────────────┘
+
+1. Sync Hygraph segments to DY as "products"
+   ├── sku: segment-summer-promo
+   ├── name: "Summer Promotion Segment"
+   └── categories: "seasonal|discount-focused"
+
+2. Create DY recommendation experience for segments
+   └── Strategy: "Popularity" or "Collaborative Filtering"
+
+3. Backend API requests segment "recommendation"
+   └── DY returns: recommended segment ID(s)
+
+4. Use recommended segment to select Hygraph variant
+   └── Render personalized content server-side
+```
+
+This would let DY's ML determine which segment to assign users to, which would then be used on the website to decide which variant (based on segment assignment) to show.
+
+**⚠️ Status:** This approach has not been tested yet. It's a theoretical workaround to get ML-driven segment allocation.
 
 ### When It Could Work: Product Affinities
 
@@ -450,7 +502,7 @@ DY can learn user product affinities and map them to segments.
 
 **Not applicable for our coffee example** - Coffee preferences don't map cleanly to segments that DY can learn from purchase behavior.
 
-### Custom Targeting Rules
+### Custom Targeting Rules (Manual Approach)
 
 You can configure DY targeting rules to select segment IDs:
 
@@ -459,7 +511,7 @@ IF user is "New Visitor" → Return segment "welcome-offer"
 IF user affinity includes "Dark Roast" → Return segment "dark-roast-lovers"
 ```
 
-But this requires manual rule setup and doesn't leverage DY's ML.
+This works but requires manual rule setup and doesn't leverage DY's ML. For simple use cases with clear targeting criteria, this may be sufficient.
 
 ---
 
