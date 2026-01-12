@@ -16,7 +16,6 @@ export async function fetchFromCMS(query: string, variables = {}) {
         query,
         variables,
       }),
-      next: { revalidate: 60 }, // Revalidate every minute
     });
 
     const json = await res.json();
@@ -30,7 +29,9 @@ export async function fetchFromCMS(query: string, variables = {}) {
   } catch (error) {
     console.error("Error fetching from CMS:", error);
     throw new Error(
-      `Failed to fetch from CMS: ${error instanceof Error ? error.message : String(error)}`,
+      `Failed to fetch from CMS: ${
+        error instanceof Error ? error.message : String(error)
+      }`
     );
   }
 }
