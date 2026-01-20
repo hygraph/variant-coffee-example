@@ -65,7 +65,7 @@ interface DynamicRecommendationsResponse {
 }
 
 export async function getDynamicRecommendations(
-  requestData: DynamicRecommendationsRequest & DYContext
+  requestData: DynamicRecommendationsRequest & DYContext,
 ): Promise<DynamicRecommendationsResponse> {
   const url = "https://dy-api.com/v2/serve/user/choose";
   const options = {
@@ -96,9 +96,8 @@ export async function coffeeRecommendations(dyCtx: DYContext) {
   };
 
   const resp = await getDynamicRecommendations(requestData);
-  console.debug(JSON.stringify(resp, null, 2));
-
+  console.debug("getDynamicRecommendations", JSON.stringify(resp, null, 2));
   return resp.choices[0].variations[0].payload.data.slots.map(
-    (slot) => slot.sku
+    (slot) => slot.sku,
   );
 }

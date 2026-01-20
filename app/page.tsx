@@ -18,11 +18,9 @@ export default async function HomePage({
 
   // Get DY recommendations
   const dyCtx = await buildDYContext({ pagePath: "/", pageType: "HOMEPAGE" });
-  const recommendedSkus = await coffeeRecommendations(dyCtx);
-  console.debug("DY recommended SKUs:", recommendedSkus);
 
   // Fetch data from CMS
-  let homeData = await getHomePageData(segment, variantId);
+  let homeData = await getHomePageData(dyCtx, segment, variantId);
   homeData = applyVariant(homeData);
   // console.log(JSON.stringify(homeData.hero.title));
   return (
